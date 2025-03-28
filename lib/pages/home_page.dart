@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'recipe_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,52 +39,61 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Recipe Finder'),
+        title: Text('Recipe Finder', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
+        backgroundColor: Colors.deepOrange,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Recipe Finder',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search for recipes...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                prefixIcon: Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                prefixIcon: Icon(Icons.search, color: Colors.deepOrange),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    fetchRecipes(_searchController.text);
-                  },
+                  icon: Icon(Icons.send, color: Colors.deepOrange),
+                  onPressed: () => fetchRecipes(_searchController.text),
                 ),
               ),
             ),
             SizedBox(height: 20),
             _isLoading
-                ? CircularProgressIndicator()
+                ? CircularProgressIndicator(color: Colors.deepOrange)
                 : Expanded(
                     child: ListView.builder(
                       itemCount: _recipes.length,
                       itemBuilder: (context, index) {
                         final recipe = _recipes[index];
-                        return ListTile(
-                          leading: Image.network(
-                            recipe['image'],
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
+                        return Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          child: ListTile(
+                            title: Text(recipe['title'], style: TextStyle(fontWeight: FontWeight.bold)),
+                            trailing: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.deepOrange,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RecipePage(recipeId: recipe['id']),
+                                  ),
+                                );
+                              },
+                              child: Text("View", style: TextStyle(color: Colors.white)),
+                            ),
                           ),
-                          title: Text(recipe['title']),
                         );
                       },
                     ),
