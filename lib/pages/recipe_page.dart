@@ -4,7 +4,7 @@ import 'dart:convert';
 
 class RecipePage extends StatefulWidget {
   final int recipeId;
-  RecipePage({required this.recipeId});
+  const RecipePage({super.key, required this.recipeId});
 
   @override
   _RecipePageState createState() => _RecipePageState();
@@ -79,7 +79,7 @@ class _RecipePageState extends State<RecipePage> {
                                       padding: const EdgeInsets.symmetric(vertical: 4),
                                       child: Text("• ${ingredient['original']}", style: TextStyle(fontSize: 16)),
                                     ))
-                                .toList(),
+                                ,
                             SizedBox(height: 20),
                             Text("📖 Instructions:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                             SizedBox(height: 10),
